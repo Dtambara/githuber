@@ -4,7 +4,7 @@ import Organization from './pages/Organization';
 import Repositories from './pages/Repositories';
 import Welcome from './pages/Welcome';
 
-const Routes = StackNavigator({
+const createNavigator = (isLogged = false) => StackNavigator({
   Welcome: { screen: Welcome },
   User: {
     screen: TabNavigator({
@@ -13,7 +13,7 @@ const Routes = StackNavigator({
     }),
   },
 }, {
-  initialRouteName: 'Welcome',
+  initialRouteName: isLogged ? 'User' : 'Welcome',
 });
 
-export default Routes;
+export default createNavigator;

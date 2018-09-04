@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   StatusBar,
   ActivityIndicator,
+  AsyncStorage,
 } from 'react-native';
 
 import styles from './styles';
@@ -22,7 +23,7 @@ export default class Welcome extends Component {
   state = {
     username: '',
     loading: false,
-    errorMessage: null
+    errorMessage: null,
   };
 
   static propTypes = {
@@ -31,10 +32,14 @@ export default class Welcome extends Component {
     }).isRequired,
   };
 
+  saveUser = async (username) => {
+    await AsyncStorage.setItem('@Githuber:username', username);
+  };
+
   checkUserExists = async (username) => {
     const user = await api.get(`/users/${username}`);
     return user;
-  }
+  };
 
   signin = async () => {
     this.setState({ loading: true });
@@ -46,6 +51,8 @@ export default class Welcome extends Component {
 
     try {
       await this.checkUserExists(username);
+
+      await this.saveUser(username);
 
       const resetAction = StackActions.reset({
         index: 0,
